@@ -1,10 +1,1 @@
-{
-  "last_updated": "2026-05-02T18:15:03.690852+00:00",
-  "total": 11,
-  "alive": 0,
-  "by_protocol": {
-    "vless": 4,
-    "trojan": 3,
-    "hysteria2": 4
-  }
-}
+{"last_updated": "2026-05-02T18:47:42.407656", "total_servers": 11, "new_servers": 11, "avg_ping": 142, "most_country": "غير معروف", "most_country_count": 11, "countries": {"غير معروف": 11}, "by_protocol": {"vmess": 0, "vless": 4, "trojan": 3, "ss": 0, "other": 4}}

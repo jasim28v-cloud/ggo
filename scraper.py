@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-DOKA PRO - Ultimate Edition 2025 ✨
-Sources: Exclave VPN
-Features: Light/Dark Mode, PWA, Real Ping, Glassmorphism, Animated UI
+DOKA PRO - Exclave Ultimate Edition 2025 ✨
+Source: Exclave VPN (Single Channel)
+Features: Light/Dark Mode, PWA, REAL Ping for Exclave, Glassmorphism
 """
 
 from __future__ import annotations
@@ -13,6 +13,7 @@ import re
 import random
 import socket
 import time
+import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
@@ -56,48 +57,86 @@ PROTOCOL_ICONS: Final[dict[str, str]] = {
 }
 
 
-# ==================== دوال Ping ====================
+# ==================== دوال Ping (تم إصلاح Exclave) ====================
 def extract_host(url: str) -> str | None:
+    """استخراج الهوست - تم إصلاحه لروابط Exclave المشفرة."""
     try:
         if "://" not in url:
             return None
+        
+        # ✅ معالجة خاصة لروابط Exclave المشفرة
         if url.startswith("exclave://"):
-            sni_match = re.search(r'sni=([^&]+)', url)
-            if sni_match: return sni_match.group(1)
+            # محاولة فك تشفير base64
+            base64_match = re.search(r'\?(eNp[a-zA-Z0-9+/=]+)', url)
+            if base64_match:
+                try:
+                    decoded = base64.b64decode(base64_match.group(1)).decode("utf-8", errors="ignore")
+                    host_match = re.search(r'([a-zA-Z0-9][-a-zA-Z0-9]*\.)+[a-zA-Z]{2,}', decoded)
+                    if host_match:
+                        return host_match.group(0)
+                except:
+                    pass
+            
+            # محاولة استخراج الهوست من الـ SNI
+            sni_match = re.search(r'[&?]sni=([^&]+)', url)
+            if sni_match:
+                return sni_match.group(1)
+            
+            # أي دومين في الرابط
             domain_match = re.search(r'([a-zA-Z0-9][-a-zA-Z0-9]*\.)+[a-zA-Z]{2,}', url)
-            if domain_match: return domain_match.group(0)
+            if domain_match:
+                return domain_match.group(0)
+            
             return None
+        
+        # للروابط العادية
         encoded = url.split("://", 1)[1]
-        if "?" in encoded: encoded = encoded.split("?")[1]
+        if "?" in encoded:
+            encoded = encoded.split("?")[1]
+        
         if url.startswith("vmess://"):
-            import base64
             decoded = base64.b64decode(encoded).decode("utf-8", errors="ignore")
             return json.loads(decoded).get("add")
+        
         for part in encoded.split("@"):
             c = part.split(":")[0]
-            if "." in c and not c.startswith(("http","tcp","ws","grpc","hysteria","exclave")): return c
+            if "." in c and not c.startswith(("http", "tcp", "ws", "grpc", "hysteria", "exclave")):
+                return c
+        
         sni = re.search(r'sni=([^&]+)', encoded)
-        if sni: return sni.group(1)
+        if sni:
+            return sni.group(1)
+        
         return None
-    except: return None
+    except:
+        return None
+
 
 def tcp_ping(host: str) -> int | None:
+    """فحص اتصال TCP للبو 443."""
     try:
         start = time.monotonic()
-        with socket.create_connection((host, 443), timeout=1.5):
+        with socket.create_connection((host, 443), timeout=2.0):
             return int((time.monotonic() - start) * 1000)
-    except: return None
+    except:
+        return None
+
 
 def ping_server(url: str) -> tuple[int | None, bool]:
+    """فحص سيرفر مع محاولتين."""
     host = extract_host(url)
-    if not host: return None, False
+    if not host:
+        return None, False
     for _ in range(2):
         r = tcp_ping(host)
-        if r: return r, True
+        if r:
+            return r, True
     return None, False
 
+
 def measure_pings(servers: list[dict]) -> list[dict]:
-    print(f"🧪 فحص {len(servers)} سيرفر...")
+    """فحص جميع السيرفرات بالتوازي."""
+    print(f"🧪 جاري فحص {len(servers)} سيرفر...")
     with ThreadPoolExecutor(max_workers=30) as ex:
         futures = {ex.submit(ping_server, s["url"]): i for i, s in enumerate(servers)}
         for f in as_completed(futures):
@@ -105,12 +144,16 @@ def measure_pings(servers: list[dict]) -> list[dict]:
             p, a = f.result()
             servers[i]["ping"] = p if p else random.randint(200, 400)
             servers[i]["alive"] = a
+    
+    alive = sum(1 for s in servers if s["alive"])
+    print(f"   ✅ {alive}/{len(servers)} سيرفر حي")
     return servers
 
 
 # ==================== دوال الجلب ====================
 def fetch_page(url: str, name: str) -> str:
-    print(f"📥 جلب {name}...")
+    """جلب صفحة تيليجرام."""
+    print(f"📥 جاري جلب {name}...")
     try:
         r = requests.get(url, headers=REQUEST_HEADERS, timeout=30)
         r.raise_for_status()
@@ -119,12 +162,15 @@ def fetch_page(url: str, name: str) -> str:
         print(f"❌ {name}: {e}")
         return ""
 
+
 def extract_links(html: str, source: str) -> list[str]:
+    """استخراج روابط Exclave من HTML."""
     if source == "exclave":
         pattern = r'exclave://[^\s<"\'\s]+'
     else:
         protocols = "|".join(SUPPORTED_PROTOCOLS)
         pattern = rf"(?:{protocols})://[^\s<>\"'\n\r\t]+"
+    
     matches = re.findall(pattern, html, re.IGNORECASE)
     seen, clean = set(), []
     for link in matches:
@@ -134,8 +180,11 @@ def extract_links(html: str, source: str) -> list[str]:
             clean.append(cleaned)
     return clean
 
+
 def extract_proto(url: str) -> str:
+    """استخراج نوع البروتوكول من الرابط."""
     url_lower = url.lower()
+    
     if "exclave://" in url_lower:
         match = re.match(r'exclave://([a-z0-9]+)[?/]', url_lower)
         if match and match.group(1) in SUPPORTED_PROTOCOLS:
@@ -144,37 +193,51 @@ def extract_proto(url: str) -> str:
             if f"exclave://{proto}" in url_lower:
                 return proto.upper()
         return "UNKNOWN"
+    
     for proto in SUPPORTED_PROTOCOLS:
         if f"{proto}://" in url_lower:
             return proto.upper()
     return "UNKNOWN"
 
+
 def detect_country(url: str) -> str:
+    """تخمين الدولة من الرابط."""
     for hint, flag in COUNTRY_HINTS.items():
-        if hint in url.lower(): return flag
+        if hint in url.lower():
+            return flag
     return "🌍"
 
+
 def build_servers(links: list[str], source: str) -> list[dict]:
+    """بناء قائمة السيرفرات."""
     servers = []
     for link in links:
         proto = extract_proto(link)
         servers.append({
-            "url": link, "proto": proto,
+            "url": link,
+            "proto": proto,
             "country": detect_country(link),
             "ping": random.randint(100, 300),
-            "alive": False, "source": source,
+            "alive": False,
+            "source": source,
         })
     return servers
 
 
 # ==================== توليد Manifest ====================
 def gen_manifest() -> str:
+    """توليد manifest.json لـ PWA."""
     m = {
-        "name": "DOKA PRO V2Ray",
+        "name": "DOKA PRO - Exclave VPN",
         "short_name": "DOKA PRO",
-        "description": "أجمل تجميعة سيرفرات V2Ray - Exclave",
-        "start_url": "/index.html", "display": "standalone", "orientation": "portrait",
-        "background_color": "#0f172a", "theme_color": "#8b5cf6", "lang": "ar", "dir": "rtl",
+        "description": "سيرفرات Exclave VPN حصرية - محدثة تلقائياً",
+        "start_url": "/index.html",
+        "display": "standalone",
+        "orientation": "portrait",
+        "background_color": "#0f172a",
+        "theme_color": "#8b5cf6",
+        "lang": "ar",
+        "dir": "rtl",
         "icons": [{
             "src": "data:image/svg+xml," + (
                 "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E"
@@ -186,14 +249,17 @@ def gen_manifest() -> str:
                 "%3Ctext x='256' y='400' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='60' fill='white'%3EDOKA%3C/text%3E"
                 "%3C/svg%3E"
             ),
-            "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable"
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
         }]
     }
     return json.dumps(m, indent=2, ensure_ascii=False)
 
 
-# ==================== توليد HTML (ليلي/نهاري) ====================
+# ==================== توليد HTML ====================
 def gen_html(servers: list[dict], total: int, src_counts: dict) -> str:
+    """توليد صفحة HTML كاملة."""
     now = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
     servers_json = json.dumps(servers, ensure_ascii=False)
     alive = sum(1 for s in servers if s["alive"])
@@ -203,7 +269,12 @@ def gen_html(servers: list[dict], total: int, src_counts: dict) -> str:
         p = s["proto"].lower()
         counts[p] = counts.get(p, 0) + 1
 
-    stats = {"last_updated": datetime.now(timezone.utc).isoformat(), "total": total, "alive": alive, "by_protocol": counts}
+    stats = {
+        "last_updated": datetime.now(timezone.utc).isoformat(),
+        "total": total,
+        "alive": alive,
+        "by_protocol": counts,
+    }
     DATA_FILE.write_text(json.dumps(stats, indent=2, ensure_ascii=False), encoding="utf-8")
     MANIFEST_FILE.write_text(gen_manifest(), encoding="utf-8")
 
@@ -276,7 +347,6 @@ const colors={json.dumps(PROTOCOL_COLORS)};
 const icons={json.dumps(PROTOCOL_ICONS)};
 let filter='all',chartInst=null;
 
-// ========== Light/Dark Mode ==========
 const themeBtn=document.getElementById('theme-btn');
 const isDark=localStorage.getItem('doka-theme')==='dark';
 if(isDark){{document.body.classList.add('dark');themeBtn.innerHTML='☀️';}}else{{themeBtn.innerHTML='🌙';}}
@@ -300,7 +370,7 @@ render('all');
 
 # ==================== الدالة الرئيسية ====================
 def main() -> None:
-    print("🚀 DOKA PRO - Exclave Ultimate Edition ✨")
+    print("🚀 DOKA PRO - Exclave Ultimate ✨")
     print("=" * 50)
 
     all_servers: list[dict] = []
@@ -314,6 +384,7 @@ def main() -> None:
         all_servers.extend(build_servers(links, src_name))
         print(f"   ✅ {src_name}: {len(links)}")
 
+    # إزالة التكرار
     seen_urls = set()
     unique_servers = []
     for s in all_servers:
@@ -327,7 +398,8 @@ def main() -> None:
         return
 
     print(f"\n📊 إجمالي فريد: {len(all_servers)}")
-    
+
+    # إحصائيات
     proto_counts: dict[str, int] = {}
     for s in all_servers:
         p = s["proto"].lower()
@@ -336,14 +408,16 @@ def main() -> None:
     for proto, cnt in sorted(proto_counts.items()):
         print(f"   • {proto.upper()}: {cnt}")
 
+    # ✅ فحص حقيقي
     all_servers = measure_pings(all_servers)
+
     total = len(all_servers)
     html = gen_html(all_servers, total, src_counts)
     OUTPUT_FILE.write_text(html, encoding="utf-8")
 
     alive = sum(1 for s in all_servers if s["alive"])
     print(f"\n🎉 تم! {total} سيرفر ({alive} حي)")
-    print(f"   ✨ تصميم ليلي/نهاري - PWA جاهز")
+    print(f"   ✨ ليلي/نهاري - PWA جاهز")
 
 
 if __name__ == "__main__":

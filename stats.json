@@ -1,0 +1,10 @@
+{
+  "last_updated": "2026-05-02T18:01:11.764439+00:00",
+  "total": 11,
+  "alive": 0,
+  "by_protocol": {
+    "vless": 4,
+    "trojan": 3,
+    "hysteria2": 4
+  }
+}

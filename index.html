@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#8b5cf6"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="DOKA PRO"><title>DOKA PRO • Exclave</title>
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%238b5cf6'/%3E%3Ctext x='256' y='320' text-anchor='middle' font-size='220' fill='white'%3E🌐%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f8fafc;--surface:#fff;--border:#e2e8f0;--text:#1e293b;--sub:#64748b;--pri:#8b5cf6;--suc:#10b981;--dan:#ef4444;--shadow:0 1px 3px rgba(0,0,0,.06);--card-bg:#fff;--url-bg:#f1f5f9;--header-bg:rgba(255,255,255,.85);--gradient:linear-gradient(135deg,#8b5cf6,#6366f1)}
+.dark{--bg:#0b1120;--surface:#1a2332;--border:#2a3a4f;--text:#f1f5f9;--sub:#94a3b8;--shadow:0 1px 3px rgba(0,0,0,.3);--card-bg:#1a2332;--url-bg:#0f172a;--header-bg:rgba(26,35,50,.9)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:all .3s;padding:12px 12px 32px;padding-top:max(12px,env(safe-area-inset-top))}.container{max-width:480px;margin:0 auto}
+.header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;background:var(--header-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:14px 18px;border-radius:24px;border:1px solid var(--border);position:sticky;top:12px;z-index:50}
+.logo{font-size:1.4rem;font-weight:900;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-actions{display:flex;align-items:center;gap:8px}
+.theme-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.theme-btn:hover{transform:scale(1.05)}
+.stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:18px 14px;text-align:center;box-shadow:var(--shadow)}
+.stat-num{font-size:2rem;font-weight:900;line-height:1}
+.stat-lbl{font-size:.7rem;color:var(--sub);margin-top:4px}
+.section-title{font-size:.7rem;color:var(--sub);margin-bottom:8px;font-weight:600}
+.filters{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{padding:9px 18px;border-radius:50px;border:1px solid var(--border);background:var(--surface);color:var(--sub);font-family:'Cairo',sans-serif;font-weight:700;font-size:.78rem;white-space:nowrap;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px;box-shadow:var(--shadow)}
+.chip.active{background:var(--gradient);color:white;border-color:transparent;box-shadow:0 4px 15px rgba(139,92,246,.3)}
+.cnt{font-size:.65rem;background:rgba(255,255,255,.2);padding:2px 6px;border-radius:50px}
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow);transition:all .2s}
+.card:active{transform:scale(.98)}
+.card-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.badge{display:flex;align-items:center;gap:6px}
+.flag{font-size:1.4rem}.tag{padding:5px 10px;border-radius:50px;font-size:.65rem;font-weight:700;color:white}
+.status{font-size:.65rem;font-weight:600;display:flex;align-items:center;gap:3px}
+.dot{width:6px;height:6px;border-radius:50%}.dot-up{background:var(--suc)}.dot-down{background:var(--dan)}
+.url-box{background:var(--url-bg);padding:11px 13px;border-radius:14px;font-family:monospace;font-size:.63rem;color:var(--sub);direction:ltr;text-align:left;word-break:break-all;margin-bottom:12px;border:1px solid var(--border)}
+.actions{display:flex;gap:8px}
+.btn{flex:1;padding:12px;border-radius:14px;border:none;font-family:'Cairo',sans-serif;font-weight:700;font-size:.78rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:6px;color:white}
+.btn:hover{opacity:.9}.btn:active{transform:scale(.96)}
+.btn-qr{width:44px;height:44px;border-radius:14px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-size:1rem;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.qr-box{margin-top:10px;padding:16px;background:#fff;border-radius:14px;display:none;justify-content:center}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#10b981;color:white;padding:12px 24px;border-radius:50px;font-weight:700;font-size:.85rem;z-index:999;opacity:0;transition:all .3s;box-shadow:0 10px 30px rgba(16,185,129,.3)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.stats-page{max-width:480px;margin:40px auto;padding:16px;text-align:center}
+.stats-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 20px;box-shadow:var(--shadow)}
+.footer{text-align:center;padding:24px;color:var(--sub);font-size:.7rem}
+@media(min-width:768px){.container{max-width:600px}}
+</style></head><body>
+<div class="container">
+<div class="header"><div class="logo">⬡ DOKA EXCLAVE</div><div class="header-actions"><button class="theme-btn" id="theme-btn" title="تغيير الوضع">🌙</button></div></div>
+<div class="stats-row">
+<div class="stat"><div class="stat-num" style="background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent">11</div><div class="stat-lbl">🔰 إجمالي السيرفرات</div></div>
+<div class="stat"><div class="stat-num" style="color:#10b981;">0</div><div class="stat-lbl">⚡ أونلاين الآن</div></div>
+</div>
+<div class="section-title">🧩 فلترة بالبروتوكول</div><div class="filters"><button class="chip active" data-filter="all" style="--c:#8b5cf6">🌐 الكل <span class="cnt">11</span></button><button class="chip" data-filter="vless" style="--c:#06b6d4">VLESS <span class="cnt">4</span></button><button class="chip" data-filter="trojan" style="--c:#f59e0b">TROJAN <span class="cnt">3</span></button><button class="chip" data-filter="hysteria2" style="--c:#ec4899">HYSTERIA2 <span class="cnt">4</span></button></div>
+<div id="list"></div><div id="empty" style="display:none;text-align:center;color:var(--sub);padding:40px;">😴 لا توجد سيرفرات</div>
+</div>
+<div class="toast" id="toast">✅ تم نسخ الرابط!</div>
+<div class="stats-page" id="stats-pg" style="display:none;"><div class="stats-card"><h2 style="margin-bottom:20px;">📊 الإحصائيات</h2><canvas id="chart" style="max-height:300px;"></canvas><p style="color:var(--sub);margin-top:16px;">آخر تحديث: <span id="last-up"></span></p><button onclick="location.reload()" style="margin-top:20px;padding:14px 40px;border-radius:50px;border:none;background:var(--gradient);color:white;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;">⬅️ عودة</button></div></div>
+<div class="footer">© 2026 <strong>DOKA PRO</strong> • Exclave VPN • <button id="stats-btn" style="background:none;border:none;color:var(--pri);cursor:pointer;font-family:'Cairo',sans-serif;font-weight:600;">📊 إحصائيات</button></div>
+<script>
+const data=[{"url": "exclave://vless?eNpVjr1OwzAAhC0m3oOBycF2bKdstBtL-VEHVsd26lSxYxwnZO0r8AQsbCAhMQASr9MxUkfYSNh60t23nHR3AgCgWULS84SMxOzr7BSAZ54SlJJCQqZmElIlFRRMYSizAiGW8mzGc1e7XZT7Cdtt0KIq42_UxSYR3jdWhOh0TGQ9vFTz1Z21y3lLbwwN14sHlK9vozWM80V3ReLSlLlo2P1qc4kFQgUWn9KE2u5AH6sGBh962JVNWTvYKk_pe9-qPTgen0_bwBDb_oADHY1-HJ6-h4_X_3xD-EL3shKd7rybGn-2GlSm", "proto": "VLESS", "country": "🌍", "ping": 228, "alive": false, "source": "exclave"}, {"url": "exclave://vless?eNpTZmBgMDSx1DM0MNEzApJbtP0YGJaaGRkYJRkZG-iaGJon65qkWKTqJpkZmegapJkbJqYlWiabm6bk5ec9Lf9cnJepZ2hoaGBgoJeSV6yXWJT7c6e-fUZJSUGxqrGjqpEbEJXo5aYCqfDEvHTnxEwjVTcDVUs3VQtzVUcLBNvJ2JaBC-iY4NRk3fDUpOD85OzUEt2AovyS_OT8NyU52GxqBAEGMAlyDQMHUD-YkWGUW_qDAQUwAfGktwv2vN2-A0yuMTB0SK1IzkksSy0ryAOpAABeKFJo", "proto": "VLESS", "country": "🌍", "ping": 303, "alive": false, "source": "exclave"}, {"url": "exclave://trojan?eNpjYmBgUAZiQ0tjPSNDSz1LSz1D0x2_FRgYGhvLP3vn5ybqRoboBTi6pwbruaR-m6VfUhSSmpOaXpSY-3bBnrfbV4DJzdoO4Yl56c6JmUYMINBYkoOptxEEGEBEXn7eUwYOoDowI8Mot_QHAwqwKLKJtlTPMctw9Fe2iAp8yQQUmwS2aSOY3Glg6JBakZyTWJZaVpAH0gEAvg5Fvg", "proto": "TROJAN", "country": "🌍", "ping": 324, "alive": false, "source": "exclave"}, {"url": "exclave://trojan?eNpjYmBgUAZiQ0tjPSNDSz1LSz1Dg-2_FRgYGhvLP3vn5ybqRoboBTi6pwbruaR-m6VfUhSSmpOaXpSY-3bBnrfbV4DJzQoO4Yl56c6JmUYMINBYkoOptxEEGEBEXn7eUwYOoDowI8Mot_QHAwqwKLKJtlTPMctw9Fe2iAp8yQQUmwyxCUxuUTAwdEitSM5JLEstK8gDaQEA905Fyw", "proto": "TROJAN", "country": "🌍", "ping": 351, "alive": false, "source": "exclave"}, {"url": "exclave://trojan?eNpjYmBgUAZiQ0tjPSNDSz1LSz3Djb8VGBgaG8s_e-fnJupGhugFOLqnBuu5pH6bpV9SFJKak5pelJj7dsGet9tXgMnNCg7hiXnpzomZRgwg0FiSg6m3EQQYQEReft5TBg6gOjAjwyi39AcDCrAosom2VM8xy3D0V7aICnzJBBSbjGTfMgUDQ4fUiuScxLLUsoI8kBYAzH1FfA", "proto": "TROJAN", "country": "🌍", "ping": 269, "alive": false, "source": "exclave"}, {"url": "exclave://hysteria2?eNpjZ2BgsDTRMzQ1A2JTPdNtFiwMDCuKikvy8nKsMooCwwKy0kOLLD1C0r0rQ7IM8t2ci8yyTFwLgqoiQgLdKqIqc5IKnXNCC8MKHYuN8lKrwi2zAyrdkoxSU6I2FaWmpKQmpqQl5ukVpeiWpCbm6hV9bQQCRgY0YGRgtA3GBsqjSzMkJX0qLknMS0ksesIE5E55u2DP2-3LweQaBQUDI4fUiuScxLLUsoI8kHIAGeI_Sg", "proto": "HYSTERIA2", "country": "🌍", "ping": 290, "alive": false, "source": "exclave"}, {"url": "exclave://hysteria2?eNpjZ2BgsDDWMzIx1rMw0zM02GzBwsCwND2zJKM0SS85P1ffMacsM88SCHTzUssLEpP10xLzCjMT89Iby8vL9XIzk4vyi_PTSoBq3zYCASMDGjA0sjDdCuMAFaDLMyQlfSouScxLSSx6wgTkTnm7YM_b7SvB5CoFBQMjh9SK5JzEstSygjyQcgCzszJh", "proto": "HYSTERIA2", "country": "🌍", "ping": 360, "alive": false, "source": "exclave"}, {"url": "exclave://hysteria2?eNpjZ2BgMDQz1jM0N9IzNATShjssWBgYUvLz0ksSM8sT89L1kvPfNpaXl-vlZiYX5Rfnp5WARYCAAR2YGBpZbIZxsClISvpUXJKYl5JY9IQJyJ3ydsGet9tXg8ntCgoGRg6pFck5iWWpZQV5IOUAaugriA", "proto": "HYSTERIA2", "country": "🌍", "ping": 322, "alive": false, "source": "exclave"}, {"url": "exclave://hysteria2?eNpjZ2BgMDXRMzI10DM0t9QzNNtiwcLAUBiYalhlmh1qke1nFpzjnedSYhlUahz4obGsIE83q0DXwMBELy2xuCS1CCigV55flPOkEQgYGdCAiclmGBMojS7LkJT0qbgkMS8lsegJE5A75e2CPW-3rweTWxUUDIwcUiuScxLLUoGWgJQDAASlL7I", "proto": "HYSTERIA2", "country": "🌍", "ping": 248, "alive": false, "source": "exclave"}, {"url": "exclave://vless?eNpTYWBgMDHVMzQ10jM0NNYztNy6m5GBYWlSYlqyhbllkm5qamqaroGhoYluYrKJua5FarJZspGxsbFpqmVeft7TkuQPIKqxsSg1MSez5GdySp5eSVFiRn5KUX6uXlrpuzWeTmV-PqlFWX4-BW4m_gWhEbrl7l4FFpEuUUV53vkZuumuniWhLn4h8U7pjckZQF1PGSpKcop1iwqKKnTLMosz8_N0S1MKTEw2V5SmfGDgALoXZCNDhlFu6Q8GFNDIBCSmvF2w5-327WByl4KCgZFDakVyTmJZallBHkgRAB3WUso", "proto": "VLESS", "country": "🌍", "ping": 340, "alive": false, "source": "exclave"}, {"url": "exclave://vless?eNpTYWBgMDPTMzQ11DMx0DPatJuRgWGpeVpSapK5WZquUVqioa5JommirmWapaWuSUpSWmJiWpJJSqJRXn7e05LkDyCqsbEoNTEns-RneXm5Xnp-fnpOql5y_ts1JmXxJkHBua4WVSUeaYEmrmEWkblmXrpmzhaOziWRmVV5IR7JKeFe5WbhjomJSUnJySlPkjOK8nOfMlSU5BTrFhUUVeiWZRZn5ufplqYUmJhsrihN-cDAAXQxyFaGDKPc0h8MKKCRCUhMebtgz9vtK8HkKgUFAyOH1IrknMSy1LKCPJAiAGWAVDk", "proto": "VLESS", "country": "🌍", "ping": 331, "alive": false, "source": "exclave"}];
+const colors={"vmess": "#8b5cf6", "vless": "#06b6d4", "trojan": "#f59e0b", "ss": "#10b981", "hysteria2": "#ec4899", "unknown": "#6366f1"};
+const icons={"vmess": "fa-bolt", "vless": "fa-feather", "trojan": "fa-shield-haltered", "ss": "fa-ghost", "hysteria2": "fa-fire", "unknown": "fa-cube"};
+let filter='all',chartInst=null;
+
+// ========== Light/Dark Mode ==========
+const themeBtn=document.getElementById('theme-btn');
+const isDark=localStorage.getItem('doka-theme')==='dark';
+if(isDark){document.body.classList.add('dark');themeBtn.innerHTML='☀️';}else{themeBtn.innerHTML='🌙';}
+themeBtn.addEventListener('click',()=>{document.body.classList.toggle('dark');const dark=document.body.classList.contains('dark');localStorage.setItem('doka-theme',dark?'dark':'light');themeBtn.innerHTML=dark?'☀️':'🌙';});
+
+function render(f){
+filter=f;const list=document.getElementById('list');let filtered=f==='all'?data:data.filter(s=>s.proto.toLowerCase()===f);
+if(!filtered.length){list.innerHTML='';document.getElementById('empty').style.display='block';return}
+document.getElementById('empty').style.display='none';
+list.innerHTML=filtered.map((s,i)=>{const c=colors[s.proto.toLowerCase()]||'#8b5cf6';const ic=icons[s.proto.toLowerCase()]||'fa-link';const up=s.alive;
+return`<div class="card"><div class="card-row"><div class="badge"><span class="flag">${s.country}</span><span class="tag" style="background:${c}"><i class="fas ${ic}"></i> ${s.proto}</span><span class="status" style="color:${up?'var(--suc)':'var(--dan)'}"><span class="dot ${up?'dot-up':'dot-down'}"></span> ${up?'حي':'ميت'}</span></div><span style="font-size:.65rem;color:var(--sub);">${up?s.ping+'ms':'---'}</span></div><div class="url-box">${s.url}</div><div class="actions"><button class="btn" style="background:${c}" onclick="cp('${s.url.replace(/'/g,"\'")}')"><i class="far fa-copy"></i> نسخ</button><button class="btn-qr" onclick="qr('q${i}','${s.url.replace(/'/g,"\'")}')"><i class="fas fa-qrcode"></i></button></div><div class="qr-box" id="q${i}"></div></div>`;}).join('');}
+
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',function(){document.querySelectorAll('.chip').forEach(b=>b.classList.remove('active'));this.classList.add('active');render(this.dataset.filter);}));
+window.cp=t=>{navigator.clipboard.writeText(t);const toast=document.getElementById('toast');toast.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>toast.classList.remove('on'),2000);};
+window.qr=(id,link)=>{const el=document.getElementById(id);if(el.style.display==='flex'){el.style.display='none';return}if(!el.innerHTML)new QRCode(el,{text:link,width:140,height:140,colorDark:'#1e293b'});el.style.display='flex';};
+document.getElementById('stats-btn').addEventListener('click',async()=>{document.querySelector('.header').style.display='none';document.querySelectorAll('.stats-row,.section-title,.filters').forEach(e=>e.style.display='none');document.getElementById('list').style.display='none';document.querySelector('.footer').style.display='none';document.getElementById('stats-pg').style.display='block';
+try{const res=await fetch('stats.json');const stats=await res.json();document.getElementById('last-up').innerText=new Date(stats.last_updated).toLocaleString('ar-SA');const ctx=document.getElementById('chart').getContext('2d');if(chartInst)chartInst.destroy();const labels=Object.keys(stats.by_protocol).map(p=>p.toUpperCase());chartInst=new Chart(ctx,{type:'doughnut',data:{labels,datasets:[{data:Object.values(stats.by_protocol),backgroundColor:labels.map(l=>colors[l.toLowerCase()]||'#8b5cf6'),borderWidth:3}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{padding:16,font:{family:'Cairo',size:13}}}}}});}catch(e){}});
+render('all');
+</script></body></html>

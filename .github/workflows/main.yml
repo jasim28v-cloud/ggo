@@ -1,78 +1,67 @@
-name: 🔄 Update DOKA Servers (Professional)
+# main.py - DOKA Exclave Ultimate Scheduler
+import time
+import schedule
+import sys
+from scraper import run_doka_exclave
+from datetime import datetime
+import threading
 
-# ==================== المشغلات ====================
-on:
-  schedule:
-    - cron: '0 */3 * * *'
-  workflow_dispatch:
-  push:
-    branches: [ main ]
+def progress_bar(duration=120, msg="🔄 جاري التحديث"):
+    """شريط تقدم أثناء الكشط"""
+    chars = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+    i = 0
+    start = time.time()
+    while time.time() - start < duration:
+        elapsed = time.time() - start
+        pct = min(100, int(elapsed / duration * 100))
+        bar = "█" * (pct // 5) + "░" * (20 - pct // 5)
+        sys.stdout.write(f"\r{msg} [{bar}] {pct}% {chars[i % len(chars)]}")
+        sys.stdout.flush()
+        i += 1
+        time.sleep(0.1)
+    print()
 
-# ==================== الأذونات ====================
-permissions:
-  contents: write
-  pages: write
-  id-token: write
+def job():
+    print(f"\n{'='*50}")
+    print(f"⏰ [{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] بدء الكشط الدوري...")
+    print(f"{'='*50}")
+    run_doka_exclave()
 
-# ==================== المهام ====================
-jobs:
-  scrape-and-deploy:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15  # ✅ مهلة كلية
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+def main():
+    print("=" * 60)
+    print("🚀 DOKA EXCLAVE - Ultimate Edition")
+    print("📡 كشط تلقائي من Telegram كل 3 ساعات")
+    print("🎨 Glass UI + إحصائيات + مفضلة + تأثيرات")
+    print("=" * 60)
     
-    steps:
-      - name: 📥 1. استنساخ المستودع
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+    # تشغيل أولي
+    print("🔄 تشغيل أولي...")
+    job()
+    
+    # جدولة كل 3 ساعات
+    schedule.every(3).hours.do(job)
+    print("⏰ تم الجدولة: تحديث تلقائي كل 3 ساعات")
+    
+    next_run = schedule.next_run()
+    if next_run:
+        print(f"⏭ التحديث القادم في: {next_run.strftime('%Y-%m-%d %H:%M:%S')}")
+    
+    print("🟢 النظام في وضع المراقبة...\n")
+    print("📋 الإضافات النشطة:")
+    print("   ⭐ نظام المفضلة (localStorage)")
+    print("   🔍 بحث فوري")
+    print("   🆕 كشف السيرفرات الجديدة")
+    print("   📊 مخططات إحصائية")
+    print("   ⏱ مؤقت التحديث القادم")
+    print("   ✨ تأثيرات حركية + جزيئات")
+    print("   🌍 إحصاء الدول")
+    print("   ⌚ ساعة رقمية حية")
+    print("   💬 رسائل ترحيب عشوائية")
+    print("   ⌨️ تأثير كتابة تلقائية\n")
+    
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
 
-      - name: 🐍 2. تنصيب بايثون
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: 📦 3. تنصيب مكتبات بايثون
-        run: pip install requests
-
-      - name: 🚀 4. تشغيل سكريبت الكشط
-        run: python scraper.py
-        timeout-minutes: 10  # ✅ مهلة للسكريبت
-
-      - name: 📊 5. التحقق من وجود تغييرات
-        id: check_changes
-        run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            echo "changes_detected=true" >> $GITHUB_OUTPUT
-          else
-            echo "changes_detected=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 📤 6. رفع التغييرات إلى المستودع
-        if: steps.check_changes.outputs.changes_detected == 'true'
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add index.html stats.json manifest.json  # ✅ إضافة manifest
-          git commit -m "🔄 تحديث تلقائي للسيرفرات - $(date +'%Y-%m-%d %H:%M')"
-          git push
-
-      - name: ⚙️ 7. إعداد GitHub Pages
-        uses: actions/configure-pages@v4
-
-      - name: 📎 8. رفع الملفات للنشر
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-          retention-days: 1  # ✅ توفير مساحة
-
-      - name: 🚀 9. النشر على GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-      - name: ✅ 10. تأكيد الانتهاء
-        run: |
-          echo "🎉 تم تحديث الموقع ونشره بنجاح!"
-          echo "🔗 رابط الموقع: ${{ steps.deployment.outputs.page_url }}"
+if __name__ == "__main__":
+    main()

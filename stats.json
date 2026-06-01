@@ -1,1 +1,1 @@
-{"last_updated": "2026-06-01T11:20:44.466600", "total_servers": 10, "new_servers": 1, "avg_ping": 121, "most_country": "غير معروف", "most_country_count": 10, "countries": {"غير معروف": 10}, "by_protocol": {"vmess": 0, "vless": 4, "trojan": 1, "ss": 0, "other": 5}}
+{"last_updated": "2026-06-01T17:26:27.813463", "total_servers": 10, "new_servers": 4, "avg_ping": 95, "most_country": "غير معروف", "most_country_count": 10, "countries": {"غير معروف": 10}, "by_protocol": {"vmess": 1, "vless": 5, "trojan": 1, "ss": 0, "other": 3}}

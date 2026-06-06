@@ -195,7 +195,7 @@
                     <p class="text-gray-500 text-xs mt-1">جديد 🆕</p>
                 </div>
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[100px]">
-                    <span class="text-2xl md:text-3xl font-black text-yellow-400">68</span>
+                    <span class="text-2xl md:text-3xl font-black text-yellow-400">74</span>
                     <p class="text-gray-500 text-xs mt-1">متوسط ms</p>
                 </div>
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[120px]">
@@ -289,13 +289,13 @@
     </div>
 
     <script>
-        const serversData = [{"link": "exclave://hysteria2?eNpjZ2BgMDHVMzQx1jMyMNYzNNxswcLAkJ9SUmFpmZiZU2yelJVatcUyyTS5NKs4NSW1qCKpwHRnXmp5sV5Kil5ucbZe8ddGIGBAByYmm2FMbNJJSZ-KSxLzUhKLnjABuVPeLtjzdvt2MLlLQcHA1CG1IjknsSy1rCAPpBwAjPkvMw", "proto": "EXCLAVE", "proto_color": "indigo", "flag": "🌍", "country": "غير معروف", "ping": 68, "is_new": false, "added_time": "19:11"}];
-        const statsData = {"last_updated": "2026-06-06T19:11:58.517450", "total_servers": 1, "new_servers": 0, "avg_ping": 68, "most_country": "غير معروف", "most_country_count": 1, "countries": {"غير معروف": 1}, "by_protocol": {"vmess": 0, "vless": 0, "trojan": 0, "ss": 0, "other": 1}};
+        const serversData = [{"link": "exclave://hysteria2?eNpjZ2BgMDHVMzQx1jMyMNYzNNxswcLAkJ9SUmFpmZiZU2yelJVatcUyyTS5NKs4NSW1qCKpwHRnXmp5sV5Kil5ucbZe8ddGIGBAByYmm2FMbNJJSZ-KSxLzUhKLnjABuVPeLtjzdvt2MLlLQcHA1CG1IjknsSy1rCAPpBwAjPkvMw", "proto": "EXCLAVE", "proto_color": "indigo", "flag": "🌍", "country": "غير معروف", "ping": 74, "is_new": false, "added_time": "21:59"}];
+        const statsData = {"last_updated": "2026-06-06T21:59:11.689625", "total_servers": 1, "new_servers": 0, "avg_ping": 74, "most_country": "غير معروف", "most_country_count": 1, "countries": {"غير معروف": 1}, "by_protocol": {"vmess": 0, "vless": 0, "trojan": 0, "ss": 0, "other": 1}};
         const greetings = ["💛 أهلاً بك يا صديقي! سيرفرات اليوم جاهزة.", "☕ يومك سعيد إن شاء الله، تصفح براحة.", "🌙 مساء النور، الحماية أولاً.", "⚡ سرعة وأمان في متناول يدك.", "🌟 اليوم سيرفرات جديدة بانتظارك!", "🔐 خصوصيتك تهمنا، اختر سيرفرك.", "🚀 انطلق بلا حدود مع Exclave.", "🎯 دقة في الاختيار، حرية في التصفح.", "💪 أقوى السيرفرات بين يديك.", "🌈 تصفح العالم كما تريد.", "📡 اتصال آمن، سرعة فائقة.", "🛡️ درعك الرقمي جاهز."];
         let currentFilter = 'all';
         let chartInstances = {};
         const UPDATE_INTERVAL = 3 * 60 * 60;
-        const updateTime = new Date('2026-06-06T19:11:58.517450');
+        const updateTime = new Date('2026-06-06T21:59:11.689625');
         
         // Favorites
         function getFavorites() { try { return JSON.parse(localStorage.getItem('doka_fav') || '[]'); } catch { return []; } }

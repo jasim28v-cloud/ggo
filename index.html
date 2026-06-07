@@ -187,7 +187,7 @@
             
             <div class="flex flex-wrap justify-center gap-3 mb-4">
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[100px]">
-                    <span class="text-2xl md:text-3xl font-black bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">1</span>
+                    <span class="text-2xl md:text-3xl font-black bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">0</span>
                     <p class="text-gray-500 text-xs mt-1">سيرفر</p>
                 </div>
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[100px]">
@@ -195,12 +195,12 @@
                     <p class="text-gray-500 text-xs mt-1">جديد 🆕</p>
                 </div>
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[100px]">
-                    <span class="text-2xl md:text-3xl font-black text-yellow-400">78</span>
+                    <span class="text-2xl md:text-3xl font-black text-yellow-400">0</span>
                     <p class="text-gray-500 text-xs mt-1">متوسط ms</p>
                 </div>
                 <div class="glass px-5 py-3 rounded-2xl text-center min-w-[120px]">
-                    <span class="text-lg md:text-xl font-black text-cyan-400">غير معروف</span>
-                    <p class="text-gray-500 text-xs mt-1">الأكثر (1)</p>
+                    <span class="text-lg md:text-xl font-black text-cyan-400">غير محدد</span>
+                    <p class="text-gray-500 text-xs mt-1">الأكثر (0)</p>
                 </div>
             </div>
         </div>
@@ -209,7 +209,7 @@
     <section class="max-w-7xl mx-auto px-4 py-2">
         <div class="flex flex-wrap justify-center gap-2" id="filter-tabs">
             <button class="tab-btn active px-4 py-2 rounded-full text-xs font-medium" data-filter="all">
-                <i class="fas fa-globe ml-1"></i> الكل (<span id="count-all">1</span>)
+                <i class="fas fa-globe ml-1"></i> الكل (<span id="count-all">0</span>)
             </button>
             <button class="tab-btn px-4 py-2 rounded-full text-xs font-medium" data-filter="vmess">
                 🟠 VMess (<span id="count-vmess">0</span>)
@@ -289,13 +289,13 @@
     </div>
 
     <script>
-        const serversData = [{"link": "exclave://hysteria2?eNpjZ2BgMDHVMzQx1jMyMNYzNNxswcLAkJ9SUmFpmZiZU2yelJVatcUyyTS5NKs4NSW1qCKpwHRnXmp5sV5Kil5ucbZe8ddGIGBAByYmm2FMbNJJSZ-KSxLzUhKLnjABuVPeLtjzdvt2MLlLQcHA1CG1IjknsSy1rCAPpBwAjPkvMw", "proto": "EXCLAVE", "proto_color": "indigo", "flag": "🌍", "country": "غير معروف", "ping": 78, "is_new": false, "added_time": "02:56"}];
-        const statsData = {"last_updated": "2026-06-07T02:56:15.708350", "total_servers": 1, "new_servers": 0, "avg_ping": 78, "most_country": "غير معروف", "most_country_count": 1, "countries": {"غير معروف": 1}, "by_protocol": {"vmess": 0, "vless": 0, "trojan": 0, "ss": 0, "other": 1}};
+        const serversData = [];
+        const statsData = {"last_updated": "2026-06-07T07:04:11.949978", "total_servers": 0, "new_servers": 0, "avg_ping": 0, "most_country": "غير محدد", "most_country_count": 0, "countries": {}, "by_protocol": {"vmess": 0, "vless": 0, "trojan": 0, "ss": 0}};
         const greetings = ["💛 أهلاً بك يا صديقي! سيرفرات اليوم جاهزة.", "☕ يومك سعيد إن شاء الله، تصفح براحة.", "🌙 مساء النور، الحماية أولاً.", "⚡ سرعة وأمان في متناول يدك.", "🌟 اليوم سيرفرات جديدة بانتظارك!", "🔐 خصوصيتك تهمنا، اختر سيرفرك.", "🚀 انطلق بلا حدود مع Exclave.", "🎯 دقة في الاختيار، حرية في التصفح.", "💪 أقوى السيرفرات بين يديك.", "🌈 تصفح العالم كما تريد.", "📡 اتصال آمن، سرعة فائقة.", "🛡️ درعك الرقمي جاهز."];
         let currentFilter = 'all';
         let chartInstances = {};
         const UPDATE_INTERVAL = 3 * 60 * 60;
-        const updateTime = new Date('2026-06-07T02:56:15.708350');
+        const updateTime = new Date('2026-06-07T07:04:11.949978');
         
         // Favorites
         function getFavorites() { try { return JSON.parse(localStorage.getItem('doka_fav') || '[]'); } catch { return []; } }
@@ -450,7 +450,7 @@
         document.getElementById('greeting-message').textContent = greetings[Math.floor(Math.random() * greetings.length)];
         
         // Visitors
-        function uv() { document.getElementById('visitor-count').textContent = Math.max(1, 1 + Math.floor(Math.random()*15)-5); }
+        function uv() { document.getElementById('visitor-count').textContent = Math.max(1, 0 + Math.floor(Math.random()*15)-5); }
         uv(); setInterval(uv, 10000);
         
         // Particles
